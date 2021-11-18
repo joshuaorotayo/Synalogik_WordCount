@@ -9,7 +9,6 @@ public class Main {
     Path fileName = Path.of("bible_daily.txt");
 
     public static void main(String[] args) {
-
         Main main = new Main();
         main.run();
     }
@@ -19,15 +18,30 @@ public class Main {
         int count;
         try {
             String fileLocation = Files.readString(getPathName());
+            String[] split = fileLocation.split(" ");
+            //String[] split = fileLocation.split("[^\\p{L}0-9\"]+");
 
-            String[] split = fileLocation.split("[^\\p{L}0-9\"]+");
+           /* Directory Check
+
+        File file = new File(String.valueOf(fileName));
+           if(file.isDirectory()){
+                File[] listofFiles = file.listFiles();
+                for(File f: listofFiles){
+                    fileLocation = Files.readString(f.toPath());
+                    split = fileLocation.split("[^\\p{L}0-9\"]+");
+                }
+            }else {
+
+                fileLocation = Files.readString(getPathName());
+                split = fileLocation.split("[^\\p{L}0-9\"]+");
+            }*/
+
             count = split.length;
 
             HashMap<Integer, Integer> occurrenceMap = new HashMap<>();
             for (String s : split) {
-                double length = s.length();
-                sumLengths = sumLengths + length;
-                occurrenceMap.merge((int) length, 1, Integer::sum);
+                sumLengths = sumLengths + s.length();
+                occurrenceMap.merge(s.length(), 1, Integer::sum);
             }
 
             System.out.println("Word Count = " + count);
@@ -52,7 +66,6 @@ public class Main {
     }
 
     public String getAverage(double sum_of_lengths, double number_of_words){
-
         DecimalFormat df = new DecimalFormat("0.##");
         return df.format(sum_of_lengths/number_of_words);
     }
@@ -64,7 +77,6 @@ public class Main {
     }
 
     public void printMostFrequent(HashMap<Integer, Integer> map) {
-
         int max = Collections.max(map.values());
 
         List<Integer> frequentList = map.entrySet().stream()
