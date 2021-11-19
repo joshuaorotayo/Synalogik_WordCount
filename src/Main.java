@@ -1,42 +1,37 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Main {
-    Path fileName = Path.of("bible_daily.txt");
+    Path fileName = Path.of("test 1.txt");
+    static final Pattern dot = Pattern.compile("\\.(?=\\s|$)");
 
     public static void main(String[] args) {
         Main main = new Main();
+
+        //Scanner s =  new Scanner(System.in);
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println("Enter the location and file name of the file to be counted ");
+        System.out.println("e.g. test 1.txt for a local file\n");
         main.run();
     }
 
     public void run(){
         double sumLengths = 0;
-        int count;
+
         try {
             String fileLocation = Files.readString(getPathName());
-            String[] split = fileLocation.split(" ");
-            //String[] split = fileLocation.split("[^\\p{L}0-9\"]+");
+            Matcher m = dot.matcher(fileLocation);
+            String[] split = m.replaceAll("").split(" ");
 
-           /* Directory Check
-
-        File file = new File(String.valueOf(fileName));
-           if(file.isDirectory()){
-                File[] listofFiles = file.listFiles();
-                for(File f: listofFiles){
-                    fileLocation = Files.readString(f.toPath());
-                    split = fileLocation.split("[^\\p{L}0-9\"]+");
-                }
-            }else {
-
-                fileLocation = Files.readString(getPathName());
-                split = fileLocation.split("[^\\p{L}0-9\"]+");
-            }*/
-
-            count = split.length;
+            Stream<String> fileContent = Files.lines(Paths.get("test 1.txt"));
 
             HashMap<Integer, Integer> occurrenceMap = new HashMap<>();
             for (String s : split) {
@@ -44,13 +39,14 @@ public class Main {
                 occurrenceMap.merge(s.length(), 1, Integer::sum);
             }
 
-            System.out.println("Word Count = " + count);
+            System.out.println("Word Count = " + split.length);
 
-            System.out.println("Average word length = " + getAverage(sumLengths, count));
+            System.out.println("Average word length = " + getAverage(sumLengths, split.length));
 
             printOccurrenceCount(occurrenceMap);
 
-            printMostFrequent(occurrenceMap);
+            int mostFrequent = getMostFrequent(occurrenceMap);
+            System.out.println("The most frequently occurring word length is " + mostFrequent + ", for word length(s) of " + getFrequentList(occurrenceMap, mostFrequent));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -66,7 +62,7 @@ public class Main {
     }
 
     public String getAverage(double sum_of_lengths, double number_of_words){
-        DecimalFormat df = new DecimalFormat("0.##");
+        DecimalFormat df = new DecimalFormat("0.###");
         return df.format(sum_of_lengths/number_of_words);
     }
 
@@ -76,15 +72,17 @@ public class Main {
         }
     }
 
-    public void printMostFrequent(HashMap<Integer, Integer> map) {
-        int max = Collections.max(map.values());
+    public int getMostFrequent(HashMap<Integer, Integer> map) {
+        return Collections.max(map.values());
+    }
 
-        List<Integer> frequentList = map.entrySet().stream()
+    public List<Integer> getFrequentList(HashMap<Integer, Integer> map, int max){
+       List<Integer> frequentList = map.entrySet().stream()
                 .filter(integerIntegerEntry -> integerIntegerEntry.getValue() == max)
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
 
-        System.out.println("The most frequently occurring word length is " + max + ", for word length(s) of " + frequentList);
+        return  frequentList;
     }
 }
 
