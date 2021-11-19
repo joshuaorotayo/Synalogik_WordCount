@@ -33,11 +33,19 @@ public class Main {
 
             Stream<String> fileContent = Files.lines(Paths.get("test 1.txt"));
 
-            HashMap<Integer, Integer> occurrenceMap = new HashMap<>();
-            for (String s : split) {
-                sumLengths = sumLengths + s.length();
-                occurrenceMap.merge(s.length(), 1, Integer::sum);
-            }
+            Map<Integer, Integer> occurrenceMap = new HashMap<>();
+//            for (String s : split) {
+//                sumLengths = sumLengths + s.length();
+//                occurrenceMap.merge(s.length(), 1, Integer::sum);
+//            }
+
+            occurrenceMap = fileContent
+                    .map(x -> x.split(" "))
+                            .collect(Collectors.toMap(
+                                    x -> x.length,
+                                    x -> 1, Integer::sum));
+            ;
+
 
             System.out.println("Word Count = " + split.length);
 
@@ -66,17 +74,17 @@ public class Main {
         return df.format(sum_of_lengths/number_of_words);
     }
 
-    public void printOccurrenceCount(HashMap<Integer, Integer> map){
+    public void printOccurrenceCount(Map<Integer, Integer> map){
         for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
             System.out.println("Number of words of length " + entry.getKey().toString() + " is " + entry.getValue().toString());
         }
     }
 
-    public int getMostFrequent(HashMap<Integer, Integer> map) {
+    public int getMostFrequent(Map<Integer, Integer> map) {
         return Collections.max(map.values());
     }
 
-    public List<Integer> getFrequentList(HashMap<Integer, Integer> map, int max){
+    public List<Integer> getFrequentList(Map<Integer, Integer> map, int max){
        List<Integer> frequentList = map.entrySet().stream()
                 .filter(integerIntegerEntry -> integerIntegerEntry.getValue() == max)
                 .map(Map.Entry::getKey)
