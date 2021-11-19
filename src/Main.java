@@ -34,17 +34,16 @@ public class Main {
             Stream<String> fileContent = Files.lines(Paths.get("test 1.txt"));
 
             Map<Integer, Integer> occurrenceMap = new HashMap<>();
-//            for (String s : split) {
-//                sumLengths = sumLengths + s.length();
-//                occurrenceMap.merge(s.length(), 1, Integer::sum);
-//            }
+            for (String s : split) {
+                sumLengths = sumLengths + s.length();
+                occurrenceMap.merge(s.length(), 1, Integer::sum);
+            }
 
             occurrenceMap = fileContent
                     .map(x -> x.split(" "))
                             .collect(Collectors.toMap(
                                     x -> x.length,
                                     x -> 1, Integer::sum));
-            ;
 
 
             System.out.println("Word Count = " + split.length);
