@@ -4,78 +4,56 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Main {
-    Path fileName = Path.of("test 1.txt");
-    static final Pattern dot = Pattern.compile("\\.(?=\\s|$)");
+    static final Pattern dot = Pattern.compile("\\.(?=\\s|$)|\\n+|\\r+");
 
     public static void main(String[] args) {
         Main main = new Main();
 
-        //Scanner s =  new Scanner(System.in);
         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         System.out.println("Enter the location and file name of the file to be counted ");
         System.out.println("e.g. test 1.txt for a local file\n");
         main.run();
     }
 
-    public void run(){
+    public void run() {
         double sumLengths = 0;
+        int  sumWords = 0;
+        DecimalFormat df = new DecimalFormat("0.###");
+        // TODO: 20/11/2021 rework as api, fix POM file 
 
         try {
-            String fileLocation = Files.readString(getPathName());
-            Matcher m = dot.matcher(fileLocation);
-            String[] split = m.replaceAll("").split(" ");
 
-            Stream<String> fileContent = Files.lines(Paths.get("test 1.txt"));
+            Stream<String> words = Files.lines(Paths.get("bible_daily.txt"))
+                    .map (word -> word.replaceAll(dot.toString(),""))
+                    .flatMap(line -> Arrays.stream(line.split(" ")));
 
-            Map<Integer, Integer> occurrenceMap = new HashMap<>();
-            for (String s : split) {
-                sumLengths = sumLengths + s.length();
-                occurrenceMap.merge(s.length(), 1, Integer::sum);
+            Map<Integer, Integer> frequencyMap = words
+                    .collect(Collectors.toConcurrentMap(
+                    k -> k.length(),
+                    v -> 1, Integer::sum));
+
+            for (Map.Entry<Integer, Integer> entry : frequencyMap.entrySet()) {
+                sumLengths += entry.getKey() * entry.getValue();
+                sumWords += entry.getValue();
             }
 
-            occurrenceMap = fileContent
-                    .map(x -> x.split(" "))
-                            .collect(Collectors.toMap(
-                                    x -> x.length,
-                                    x -> 1, Integer::sum));
+            System.out.println("Word count = " + sumWords);
 
+            System.out.println("Average word length = " + df.format(sumLengths/sumWords));
 
-            System.out.println("Word Count = " + split.length);
+            for (Map.Entry<Integer, Integer> entry : frequencyMap.entrySet()) {
+                System.out.println("Number of words of length " + entry.getKey()+ " is " + entry.getValue());
+            }
 
-            System.out.println("Average word length = " + getAverage(sumLengths, split.length));
-
-            printOccurrenceCount(occurrenceMap);
-
-            int mostFrequent = getMostFrequent(occurrenceMap);
-            System.out.println("The most frequently occurring word length is " + mostFrequent + ", for word length(s) of " + getFrequentList(occurrenceMap, mostFrequent));
+            System.out.println("The most frequently occurring word length is " + getMostFrequent(frequencyMap) + ", for word lengths of " + getFrequentList(frequencyMap));
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = Path.of(fileName);
-    }
-
-    public Path getPathName(){
-        return fileName;
-    }
-
-    public String getAverage(double sum_of_lengths, double number_of_words){
-        DecimalFormat df = new DecimalFormat("0.###");
-        return df.format(sum_of_lengths/number_of_words);
-    }
-
-    public void printOccurrenceCount(Map<Integer, Integer> map){
-        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            System.out.println("Number of words of length " + entry.getKey().toString() + " is " + entry.getValue().toString());
         }
     }
 
@@ -83,13 +61,11 @@ public class Main {
         return Collections.max(map.values());
     }
 
-    public List<Integer> getFrequentList(Map<Integer, Integer> map, int max){
-       List<Integer> frequentList = map.entrySet().stream()
-                .filter(integerIntegerEntry -> integerIntegerEntry.getValue() == max)
+    public List<Integer> getFrequentList(Map<Integer, Integer> map) {
+        return map.entrySet().stream()
+                .filter(integerIntegerEntry -> integerIntegerEntry.getValue() == Collections.max(map.values()))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
-
-        return  frequentList;
     }
 }
 
