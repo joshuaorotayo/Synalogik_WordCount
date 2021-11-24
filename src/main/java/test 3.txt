@@ -1,0 +1,11 @@
+Why? Well, English has around 200,000 words (228,000 in the Oxford English Dictionary including many words no longer used) ... but how many different words can be made with just 5 letters?
+
+26 × 26 × 26 × 26 × 26 = 11,881,376 possible 5 letter words!
+
+And that is just the 5 letter words ...
+
+Let us guess that there are 40,000 words in English that have 5 letters. So the probability of making a real word just randomly would be:
+
+40,000 / 11,881,376 = 0.003, or about 0.3% chance
+
+So real words are rare. And we can see that putting random letters together is very unlikely to produce a real word.
