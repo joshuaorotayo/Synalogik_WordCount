@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class WordCounter {
-    static final Pattern dot = Pattern.compile("\\.(?=\\s|$)|\\n+|\\r+");
+    static final Pattern fullstops = Pattern.compile("\\.(?=\\s|$)|\\n+|\\r+|\"");
     Counter counter;
 
     public static void main(String[] args) {
@@ -29,8 +29,8 @@ public class WordCounter {
     public void setupCounter(String input) {
         try {
             Stream<String> words = Files.lines(Paths.get("" + input + ""))
-                    .map(word -> word.replaceAll(dot.toString(), ""))
-                    .flatMap(line -> Arrays.stream(line.split(" ")));
+                    .map(word -> word.trim().replaceAll(fullstops.toString(), ""))
+                    .flatMap(line -> Arrays.stream(line.split(" ")).filter(item -> !item.trim().isEmpty()));
 
             Map<Integer, Integer> frequencyMap = words
                     .collect(Collectors.toConcurrentMap(
