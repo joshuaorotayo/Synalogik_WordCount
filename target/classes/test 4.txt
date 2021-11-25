@@ -1,0 +1,13 @@
+Vowels
+We can improve our success by insisting that a word have at least one vowel, since nearly every word in English has one (except fly, by and a few others). Like this:
+
+ectot gjaqv kuifg vzicu zspsu pdidb wqdis uerrs ucgej okimw
+fnevz ewxko ljgew aglgo jpfoq dcytu uwkcj dzioy wekdx xuybk
+This is a great improvement. More words can be pronounced.
+
+But there are still lots of strange words like "zspsu" and "xuybk"
+
+Letter Frequency
+So, our next improvement is to use less of the letters like j, x, z and q and more of the letters like e, t and s.
+
+In fact the frequency of letters in the English Language is well known. Here is how many times you would expect to see a letter in every 1,000 letters:
