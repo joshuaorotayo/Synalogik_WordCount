@@ -14,13 +14,12 @@ public class WordCounter {
 
     public static void main(String[] args) {
         WordCounter main = new WordCounter();
-        main.CountWords(args[0]);
+        main.setupCounter(args[0]);
+        main.printResults();
     }
 
-    public void CountWords(String input) {
-
+    public void setupCounter(String input) {
         try {
-
             Stream<String> words = Files.lines(Paths.get("" + input + ""))
                     .map(word -> word.replaceAll(dot.toString(), ""))
                     .flatMap(line -> Arrays.stream(line.split(" ")));
@@ -32,17 +31,19 @@ public class WordCounter {
 
             counter = new Counter(frequencyMap);
 
-            printWordCount();
-
-            printAverageWordLength();
-
-            printFrequencies();
-
-            printMostFrequents();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void printResults(){
+        printWordCount();
+
+        printAverageWordLength();
+
+        printFrequencies();
+
+        printMostFrequents();
     }
 
     public void printWordCount() {
