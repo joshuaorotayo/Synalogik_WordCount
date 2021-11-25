@@ -1,13 +1,14 @@
 import junit.framework.TestCase;
 import org.junit.BeforeClass;
 
+import java.io.File;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 
 public class WordCounterTest extends TestCase {
-
-    private static final String wordFile = "C:\\Users\\jorot\\IdeaProjects\\WordCounter\\src\\main\\resources\\test 1.txt";
+    private static final File resourcesDirectory = new File("src/test/java/data");
+    private static final String wordFile = resourcesDirectory.getAbsolutePath() + "/test 1.txt";
     private static WordCounter testCounter;
 
     @Override
