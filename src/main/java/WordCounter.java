@@ -13,9 +13,17 @@ public class WordCounter {
     Counter counter;
 
     public static void main(String[] args) {
-        WordCounter main = new WordCounter();
-        main.setupCounter(args[0]);
-        main.printResults();
+        if(args.length == 0)
+        {
+            System.out.println("Please enter a file name to be counted. Proper Usage is: java WordCounter [filename]");
+            System.exit(0);
+        }
+       else
+       {
+            WordCounter main = new WordCounter();
+            main.setupCounter(args[0]);
+            main.printResults();
+        }
     }
 
     public void setupCounter(String input) {
