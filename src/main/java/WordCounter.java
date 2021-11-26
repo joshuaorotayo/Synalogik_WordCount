@@ -55,7 +55,7 @@ public class WordCounter {
     }
 
     public void printWordCount() {
-        System.out.println("Word count = " + counter.getTotalWords());
+        System.out.println("\nWord count = " + counter.getTotalWords());
     }
 
     public void printAverageWordLength() {
