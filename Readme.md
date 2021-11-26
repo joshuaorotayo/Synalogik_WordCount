@@ -12,6 +12,6 @@ Assumptions:
 Instructions for use:
 - Ensuring that Java is installed on the local machine and the Java home variable is set
 - Open a command line/powershell terminal in the location of the main source code: (src/main/java/"
-- then execute command to compile the api:javac .\WordCounter.java
-- then to begin counting a file execute: java WordCounter [filename]
+- Execute the command to compile the api: javac .\WordCounter.java
+- Then to begin counting a file execute: java WordCounter [filename]
 - Text files used for testing are stored in /src/test/java/data
