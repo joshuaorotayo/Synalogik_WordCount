@@ -18,8 +18,12 @@ public class WordCounter {
             System.out.println("Please enter a file name to be counted. Proper Usage is: java WordCounter [filename]");
             System.exit(0);
         }
-       else
+       else if(!args[0].endsWith(".txt"))
        {
+           System.out.println("Please ensure the file being read is a text file and ends with the extension .txt");
+       }
+       else
+        {
             WordCounter main = new WordCounter();
             main.setupCounter(args[0]);
             main.printResults();
